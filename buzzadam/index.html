@@ -514,24 +514,92 @@
       transform: translateY(0);
     }
 
+    /* ─── HAMBURGER & MOBILE MENU ─── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 200;
+      position: fixed;
+      top: 24px;
+      right: 24px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--white);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 150;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .mobile-menu a:hover { opacity: 1; }
+
     /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      
+    @media (max-width: 768px) {
+      .nav-left, .nav-right { display: none; }
+      .nav-hamburger { display: flex; }
 
-      
+      nav {
+        padding: 20px 24px;
+        grid-template-columns: 1fr auto;
+      }
+      .nav-logo { justify-content: flex-start; }
 
-      
+      .hero { padding: 0 24px; }
+      .hero-title { font-size: clamp(32px, 9vw, 40px); }
 
-      
+      .section-header { padding: 60px 24px 32px; }
 
       .grid-container {
-        columns: 1;
-        padding: 0 24px 80px;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 24px 48px !important;
+        gap: 6px !important;
+      }
+      .project-item {
+        grid-column: unset !important;
+        grid-row: unset !important;
+        height: 260px !important;
+        width: 100% !important;
+      }
+      .project-item img {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
       }
 
-      .section-header {
-        padding: 60px 24px 32px;
-      }
+      .portfolio-cta { padding: 16px 24px 40px; }
 
       .about-strip {
         grid-template-columns: 1fr;
@@ -545,14 +613,7 @@
         gap: 24px;
         text-align: center;
       }
-
-      .footer-right {
-        justify-content: center;
-      }
-    }
-
-    @media (max-width: 600px) {
-      
+      .footer-right { justify-content: center; }
     }
 
     .portfolio-cta {
@@ -618,7 +679,16 @@
       <a href="contact.html">KONTAKT</a>
       <a href="blog.html">BLOG</a>
     </div>
+  <button class="nav-hamburger" aria-label="Menü öffnen" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
   </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="portfolio.html">PORTFOLIO</a>
+    <a href="about.html">ÜBER MICH</a>
+    <a href="contact.html">KONTAKT</a>
+    <a href="blog.html">BLOG</a>
+  </div>
 
   <!-- Hero -->
   <section class="hero">
@@ -789,6 +859,21 @@
         const overlay = document.getElementById('page-transition');
         overlay.classList.add('fade-out');
         setTimeout(() => { window.location.href = href; }, 260);
+      });
+    });
+
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const btn = document.querySelector('.nav-hamburger');
+      menu.classList.toggle('open');
+      btn.classList.toggle('open');
+      document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    }
+    document.querySelectorAll('.mobile-menu a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.querySelector('.nav-hamburger').classList.remove('open');
+        document.body.style.overflow = '';
       });
     });
 

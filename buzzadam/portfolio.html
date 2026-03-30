@@ -231,6 +231,70 @@
     .footer-right a { color: var(--gray); text-decoration: none; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 300; transition: color 0.25s; }
     .footer-right a:hover { color: var(--white); }
 
+    /* ─── HAMBURGER & MOBILE MENU ─── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 200;
+      position: fixed;
+      top: 24px;
+      right: 24px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--white);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 150;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .mobile-menu a:hover { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .nav-left, .nav-right { display: none; }
+      .nav-hamburger { display: flex; }
+      nav { padding: 20px 24px; grid-template-columns: 1fr auto; }
+      .nav-logo { justify-content: flex-start; }
+      footer { padding: 40px 24px; grid-template-columns: 1fr; gap: 24px; text-align: center; }
+      .footer-right { justify-content: center; }
+      .page-wrapper, .portfolio-section { padding-left: 24px; padding-right: 24px; }
+      .project-grid { grid-template-columns: 1fr !important; }
+      .project-grid .project-item { height: 260px !important; grid-column: 1 !important; grid-row: auto !important; }
+      .project-grid .project-item img { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; }
+      .section-header, .portfolio-category-header { padding-left: 24px; padding-right: 24px; }
+      .category-section { padding-top: 80px; }
+    }
+
     /* Page transition overlay */
     #page-transition {
       position: fixed;
@@ -270,8 +334,16 @@
       <a href="contact.html">KONTAKT</a>
       <a href="blog.html">BLOG</a>
     </div>
+    <button class="nav-hamburger" aria-label="Menü öffnen" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
-
+<div class="mobile-menu" id="mobileMenu">
+  <a href="portfolio.html">PORTFOLIO</a>
+  <a href="about.html">ÜBER MICH</a>
+  <a href="contact.html">KONTAKT</a>
+  <a href="blog.html">BLOG</a>
+</div>
 
   <!-- AUTOMOTIVE -->
   <section id="automotive" class="category-section" style="padding-top: 120px;">
@@ -525,6 +597,20 @@
         const overlay = document.getElementById('page-transition');
         if (overlay) { overlay.classList.remove('fade-out'); }
       }
+    });
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      const btn = document.querySelector('.nav-hamburger');
+      menu.classList.toggle('open');
+      btn.classList.toggle('open');
+      document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+    }
+    document.querySelectorAll('.mobile-menu a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.getElementById('mobileMenu').classList.remove('open');
+        document.querySelector('.nav-hamburger').classList.remove('open');
+        document.body.style.overflow = '';
+      });
     });
   </script>
 </body>

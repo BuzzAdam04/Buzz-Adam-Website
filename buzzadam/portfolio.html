@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio – Buzz Adam</title>
+  <style>
+    @font-face { font-family: 'Gotham'; src: url('fonts/Gotham-Black.otf') format('opentype'); font-weight: 900; }
+    @font-face { font-family: 'Gotham'; src: url('fonts/GothamBold.ttf') format('truetype'); font-weight: 700; }
+    @font-face { font-family: 'Gotham'; src: url('fonts/GothamMedium.ttf') format('truetype'); font-weight: 500; }
+    @font-face { font-family: 'Gotham'; src: url('fonts/GothamBook.ttf') format('truetype'); font-weight: 400; }
+    @font-face { font-family: 'Gotham'; src: url('fonts/GothamLight.ttf') format('truetype'); font-weight: 300; }
+
+    :root { --black: #080808; --white: #f5f5f5; --gray: #888; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'Gotham', sans-serif;
+      font-weight: 400;
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url('images/grunge.jpg') repeat;
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 28px 48px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      overflow: visible;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.95), transparent);
+    }
+
+    /* Dropdown */
+    .nav-dropdown { position: relative; display: flex; align-items: center; }
+
+    /* invisible bridge fills the gap so hover doesn't break */
+    .nav-dropdown::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 24px;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 20px);
+      left: 0;
+      transform: translateY(-6px);
+      background: #0e0e0e;
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 12px 0;
+      min-width: 210px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+    }
+    .nav-dropdown:hover .dropdown-menu {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+    .dropdown-menu a {
+      display: block;
+      padding: 11px 24px;
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(245,245,245,0.55);
+      text-decoration: none;
+      opacity: 1;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .dropdown-menu a::after { display: none; }
+    .dropdown-menu a:hover {
+      color: var(--white);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .nav-left  { display: flex; gap: 36px; align-items: center; overflow: visible; }
+    .nav-right { display: flex; gap: 36px; align-items: center; justify-content: flex-end; overflow: visible; }
+    .nav-logo  { display: flex; justify-content: center; align-items: center; }
+    .nav-logo img { height: 28px; width: auto; display: block; }
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      opacity: 0.92;
+      line-height: 1.6;
+      overflow: visible;
+      transition: opacity 0.25s;
+      position: relative;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--white);
+      transition: width 0.3s ease;
+    }
+    nav a:hover        { opacity: 1; }
+    nav a:hover::after { width: 100%; }
+    nav a.active       { opacity: 1; }
+    nav a.active::after { width: 100%; }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 160px 64px 64px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .page-header h1 {
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* CATEGORY SECTIONS */
+    .category-section { padding: 64px 48px 0; }
+    .category-title {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gray);
+      font-weight: 500;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 32px;
+    }
+
+    /* PROJECT GRID */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 3px;
+      margin-bottom: 64px;
+    }
+    .project-item {
+      position: relative;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      display: block;
+      text-decoration: none;
+      background: #111;
+    }
+    .project-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+    .project-item:hover img { transform: scale(1.04); }
+    .project-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+    }
+    .project-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,0.85) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 28px;
+    }
+    .project-item:hover .project-overlay { opacity: 1; }
+    .project-category {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 6px;
+    }
+    .project-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.2;
+      color: var(--white);
+    }
+
+    /* FADE IN */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* FOOTER */
+    footer {
+      padding: 48px 64px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      margin-top: 80px;
+    }
+    .footer-left { font-size: 11px; color: var(--gray); letter-spacing: 0.1em; font-weight: 300; }
+    .footer-center { display: flex; align-items: center; gap: 20px; justify-content: center; }
+    .footer-center img { height: 20px; width: auto; display: block; }
+    .footer-instagram { display: flex; align-items: center; color: var(--gray); opacity: 0.6; transition: opacity 0.25s; }
+    .footer-instagram:hover { opacity: 1; }
+    .footer-right { display: flex; gap: 24px; justify-content: flex-end; align-items: center; }
+    .footer-right a { color: var(--gray); text-decoration: none; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 300; transition: color 0.25s; }
+    .footer-right a:hover { color: var(--white); }
+
+    /* Page transition overlay */
+    #page-transition {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+    #page-transition.fade-out { opacity: 1; pointer-events: all; }
+
+    /* Fade in on load */
+    body { opacity: 0; animation: pageIn 0.4s ease 0.05s forwards; }
+    @keyframes pageIn { to { opacity: 1; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <div class="nav-dropdown">
+        <a href="portfolio.html" class="active">PORTFOLIO</a>
+        <div class="dropdown-menu">
+          <a href="portfolio.html#automotive">Automotive</a>
+          <a href="portfolio.html#lifestyle">Lifestyle &amp; Kampagne</a>
+          <a href="portfolio.html#event">Event &amp; Sport</a>
+          <a href="portfolio.html#corporate">Corporate</a>
+        </div>
+      </div>
+      <a href="about.html">ÜBER MICH</a>
+    </div>
+    <div class="nav-logo">
+      <a href="index.html"><img src="images/logo.png" alt="Buzz Adam"></a>
+    </div>
+    <div class="nav-right">
+      <a href="contact.html">KONTAKT</a>
+      <a href="blog.html">BLOG</a>
+    </div>
+  </nav>
+
+
+  <!-- AUTOMOTIVE -->
+  <section id="automotive" class="category-section" style="padding-top: 120px;">
+    <div class="category-title">Automotive</div>
+    <div class="project-grid">
+
+      <a href="projects/mercedes-amg-cotedazur/index.html" class="project-item fade-in">
+        <img src="projects/mercedes-amg-cotedazur/images/04.jpg" alt="Mercedes AMG GT Côte d'Azur">
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Automotive</p>
+          <p class="project-title">Mercedes AMG<br>Côte d'Azur Roadtrip</p>
+        </div></div>
+      </a>
+
+      <a href="projects/lamborghini-alpen/index.html" class="project-item fade-in">
+        <div class="project-placeholder">[ Bild folgt ]</div>
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Automotive</p>
+          <p class="project-title">Lamborghini<br>Roadtrip Alpen</p>
+        </div></div>
+      </a>
+
+      <a href="projects/flatoutgarage-ascona/index.html" class="project-item fade-in">
+        <div class="project-placeholder">[ Bild folgt ]</div>
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Automotive</p>
+          <p class="project-title">Theflatoutgarage<br>Roadtrip Ascona</p>
+        </div></div>
+      </a>
+
+      <a href="projects/proline-wheels/index.html" class="project-item fade-in">
+        <img src="projects/proline-wheels/images/06.jpg" alt="Proline Wheels 25 Jahre">
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Automotive</p>
+          <p class="project-title">Proline Wheels<br>25 Jahre Shooting</p>
+        </div></div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- LIFESTYLE / KAMPAGNE -->
+  <section id="lifestyle" class="category-section">
+    <div class="category-title">Lifestyle &amp; Kampagne</div>
+    <div class="project-grid">
+
+      <a href="projects/askyurself/index.html" class="project-item fade-in">
+        <div class="project-placeholder">[ Bild folgt ]</div>
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Kampagne</p>
+          <p class="project-title">Askyurself<br>Kampagnen</p>
+        </div></div>
+      </a>
+
+      <a href="projects/three-sixty-vodka/index.html" class="project-item fade-in">
+        <img src="projects/three-sixty-vodka/images/07.jpg" alt="Three Sixty Vodka">
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Kampagne</p>
+          <p class="project-title">Three Sixty Vodka<br>Kampagne</p>
+        </div></div>
+      </a>
+
+      <a href="projects/purelei/index.html" class="project-item fade-in">
+        <img src="projects/purelei/images/02.jpg" alt="Purelei Christmas Kampagne">
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Kampagne</p>
+          <p class="project-title">Purelei<br>Christmas Kampagne</p>
+        </div></div>
+      </a>
+
+      <a href="projects/tkhockey-lausanne/index.html" class="project-item fade-in">
+        <img src="projects/tkhockey-lausanne/images/07.jpg" alt="TK Hockey Lausanne">
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Kampagne</p>
+          <p class="project-title">TK Hockey<br>Produktlaunch Lausanne</p>
+        </div></div>
+      </a>
+
+      <a href="projects/wendela-horz/index.html" class="project-item fade-in">
+        <div class="project-placeholder">[ Bild folgt ]</div>
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Kampagne</p>
+          <p class="project-title">Wendela Horz</p>
+        </div></div>
+      </a>
+
+      <a href="projects/7ahalf-drop1/index.html" class="project-item fade-in">
+        <div class="project-placeholder">[ Bild folgt ]</div>
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Lifestyle</p>
+          <p class="project-title">7ahalf Studios<br>Drop 1</p>
+        </div></div>
+      </a>
+
+      <a href="projects/three-sixty-camp-zadar/index.html" class="project-item fade-in">
+        <div class="project-placeholder">[ Bild folgt ]</div>
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Lifestyle</p>
+          <p class="project-title">Three Sixty<br>Camp Zadar</p>
+        </div></div>
+      </a>
+
+      <a href="projects/ddv-waldhof/index.html" class="project-item fade-in">
+        <img src="projects/ddv-waldhof/images/01.jpg" alt="DDV Waldhof">
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Sport &amp; Lifestyle</p>
+          <p class="project-title">DDV Waldhof<br>Mannheim</p>
+        </div></div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- EVENT / SPORT -->
+  <section id="event" class="category-section">
+    <div class="category-title">Event &amp; Sport</div>
+    <div class="project-grid">
+
+      <a href="projects/ringside-zone/index.html" class="project-item fade-in">
+        <div class="project-placeholder">[ Bild folgt ]</div>
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Event</p>
+          <p class="project-title">Ringside Zone<br>Heidelberg Boxevent</p>
+        </div></div>
+      </a>
+
+      <a href="projects/battle-of-socials/index.html" class="project-item fade-in">
+        <div class="project-placeholder">[ Bild folgt ]</div>
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Event</p>
+          <p class="project-title">Battle of the Socials<br>Creators Cup</p>
+        </div></div>
+      </a>
+
+
+      <a href="projects/ddv-5jahre/index.html" class="project-item fade-in">
+        <div class="project-placeholder">[ Bild folgt ]</div>
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Sport</p>
+          <p class="project-title">DDV<br>Fünfjahresspecial</p>
+        </div></div>
+      </a>
+
+      <a href="projects/mhc-barcelona/index.html" class="project-item fade-in">
+        <img src="projects/mhc-barcelona/images/05.jpg" alt="MHC Barcelona EHL">
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Sport</p>
+          <p class="project-title">Europäische Meisterschaft<br>MHC Barcelona</p>
+        </div></div>
+      </a>
+
+      <a href="projects/tanz-der-basse-2025/index.html" class="project-item fade-in">
+        <div class="project-placeholder">[ Bild folgt ]</div>
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Event</p>
+          <p class="project-title">Tanz der Bässe<br>2025</p>
+        </div></div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- CORPORATE -->
+  <section id="corporate" class="category-section">
+    <div class="category-title">Corporate</div>
+    <div class="project-grid">
+
+      <a href="projects/atos-sportchirurgie/index.html" class="project-item fade-in">
+        <img src="projects/atos-sportchirurgie/images/06.jpg" alt="ATOS Sportchirurgie">
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Corporate</p>
+          <p class="project-title">ATOS Sportchirurgie</p>
+        </div></div>
+      </a>
+
+      <a href="projects/robinson-mallorca/index.html" class="project-item fade-in">
+        <img src="projects/robinson-mallorca/images/07.jpg" alt="Robinson Club Cala Serena Mallorca">
+        <div class="project-overlay"><div class="project-info">
+          <p class="project-category">Corporate</p>
+          <p class="project-title">Robinson Club<br>Cala Serena</p>
+        </div></div>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-left">© 2026 Buzz Adam</div>
+    <div class="footer-center">
+      <a href="index.html"><img src="images/logo.png" alt="Buzz Adam"></a>
+      <a href="https://www.instagram.com/buzzadam_" target="_blank" class="footer-instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+        </svg>
+      </a><a href="https://www.linkedin.com/in/blazejadamowski" target="_blank" rel="noopener" aria-label="LinkedIn" class="footer-instagram"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="3" ry="3"/><line x1="8" y1="11" x2="8" y2="16"/><line x1="8" y1="8" x2="8" y2="8.01"/><line x1="12" y1="16" x2="12" y2="11"/><path d="M16 16v-3a2 2 0 0 0-4 0"/></svg></a>
+    </div>
+    <div class="footer-right">
+      <a href="impressum.html">IMPRESSUM</a>
+      <a href="datenschutz.html">DATENSCHUTZ</a>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+
+
+  <!-- Page transition -->
+  <div id="page-transition"></div>
+  <script>
+    document.querySelectorAll('a[href]').forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('mailto') || href.startsWith('tel') || link.target === '_blank') return;
+
+      // Pure anchor on same page — just scroll, no transition
+      if (href.startsWith('#')) return;
+
+      // Same page with anchor (e.g. portfolio.html#lifestyle while on portfolio.html)
+      const targetPath = href.split('#')[0];
+      const anchor = href.includes('#') ? href.split('#')[1] : null;
+      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+      if (anchor && (targetPath === currentPath || targetPath === '')) {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const el = document.getElementById(anchor);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        });
+        return;
+      }
+
+      // External links — skip
+      if (href.startsWith('http')) return;
+
+      // Normal internal navigation — fade out then go
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const overlay = document.getElementById('page-transition');
+        overlay.classList.add('fade-out');
+        setTimeout(() => { window.location.href = href; }, 260);
+      });
+    });
+
+    // Reset overlay on back/forward cache restore
+    window.addEventListener('pageshow', e => {
+      if (e.persisted) {
+        const overlay = document.getElementById('page-transition');
+        if (overlay) { overlay.classList.remove('fade-out'); }
+      }
+    });
+  </script>
+</body>
+</html>

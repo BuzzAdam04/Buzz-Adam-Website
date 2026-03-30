@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mercedes AMG GT Côte d'Azur — BUZZ ADAM.</title>
+  <style>
+    @font-face { font-family: 'Gotham'; src: url('../../fonts/Gotham-Black.otf') format('opentype'); font-weight: 900; }
+    @font-face { font-family: 'Gotham'; src: url('../../fonts/GothamBold.ttf') format('truetype'); font-weight: 700; }
+    @font-face { font-family: 'Gotham'; src: url('../../fonts/GothamMedium.ttf') format('truetype'); font-weight: 500; }
+    @font-face { font-family: 'Gotham'; src: url('../../fonts/GothamBook.ttf') format('truetype'); font-weight: 400; }
+    @font-face { font-family: 'Gotham'; src: url('../../fonts/GothamLight.ttf') format('truetype'); font-weight: 300; }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --black: #080808; --white: #f0ede8; --gray: #888; --gray-dark: #222; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'Gotham', sans-serif; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url('../../images/grunge.jpg');
+      background-size: cover; opacity: 0.04; pointer-events: none; z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 28px 48px; display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; overflow: visible;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.95), transparent);
+    }
+    .nav-dropdown { position: relative; display: flex; align-items: center; }
+    .nav-dropdown::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); width: 220px; height: 24px; }
+    .dropdown-menu {
+      position: absolute; top: calc(100% + 20px); left: 0; transform: translateY(-6px);
+      background: #0e0e0e; border: 1px solid rgba(255,255,255,0.12); padding: 12px 0;
+      min-width: 210px; opacity: 0; pointer-events: none; transition: opacity 0.18s ease;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+    }
+    .nav-dropdown:hover .dropdown-menu { opacity: 1; pointer-events: all; transform: translateY(0); }
+    .dropdown-menu a { display: block; padding: 11px 24px; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(245,245,245,0.55); text-decoration: none; opacity: 1; transition: color 0.2s, background 0.2s; white-space: nowrap; }
+    .dropdown-menu a::after { display: none; }
+    .dropdown-menu a:hover { color: var(--white); background: rgba(255,255,255,0.04); }
+    .nav-left  { display: flex; gap: 36px; align-items: center; overflow: visible; }
+    .nav-right { display: flex; gap: 36px; align-items: center; justify-content: flex-end; overflow: visible; }
+    .nav-logo  { display: flex; justify-content: center; align-items: center; }
+    .nav-logo img { height: 28px; width: auto; display: block; }
+    nav a { color: var(--white); text-decoration: none; font-weight: 500; font-size: 11px; letter-spacing: 0.18em; opacity: 0.92; transition: opacity 0.25s; position: relative; line-height: 1.6; overflow: visible; }
+    nav a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 1px; background: var(--white); transition: width 0.3s ease; }
+    nav a:hover { opacity: 1; }
+    nav a:hover::after { width: 100%; }
+
+    /* HERO */
+    .hero { position: relative; height: 100vh; overflow: hidden; }
+    .hero img { width: 100%; height: 100%; object-fit: cover; object-position: center center; display: block; }
+    .hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(8,8,8,0.55) 0%, rgba(8,8,8,0.1) 40%, rgba(8,8,8,0.75) 100%); pointer-events: none; }
+    .hero-breadcrumb { position: absolute; top: 104px; left: 64px; z-index: 2; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(245,245,245,0.55); font-weight: 400; display: flex; align-items: center; gap: 12px; }
+    .hero-breadcrumb a { color: rgba(245,245,245,0.55); text-decoration: none; transition: color 0.2s; }
+    .hero-breadcrumb a:hover { color: var(--white); }
+    .hero-breadcrumb a::after { display: none; }
+    .hero-breadcrumb span { opacity: 0.4; }
+    .hero-bottom { position: absolute; bottom: 56px; left: 64px; right: 64px; z-index: 2; display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+    .hero-title { font-size: clamp(40px, 7vw, 96px); font-weight: 900; letter-spacing: -0.01em; text-transform: uppercase; line-height: 0.92; }
+    .hero-title em { font-style: normal; color: rgba(245,245,245,0.45); }
+    .hero-tags { display: flex; flex-direction: column; gap: 10px; text-align: right; flex-shrink: 0; }
+    .hero-tag { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--white); font-weight: 300; }
+    .hero-tag strong { color: var(--white); font-weight: 500; display: block; font-size: 12px; margin-bottom: 1px; }
+
+    /* INTRO */
+    /* PROJEKTBESCHREIBUNG — DDV-Stil */
+    .projekt-intro {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 72px 48px 64px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .aside-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gray);
+      font-weight: 300;
+      margin-bottom: 12px;
+    }
+    .aside-text {
+      font-size: 16px;
+      line-height: 1.85;
+      color: rgba(240,237,232,0.78);
+      font-weight: 300;
+    }
+    .meta-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .meta-cell {
+      border-left: 1px solid rgba(255,255,255,0.1);
+      padding-left: 16px;
+    }
+    .meta-cell-label {
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray);
+      font-weight: 300;
+      margin-bottom: 6px;
+    }
+    .meta-cell-value {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--white);
+    }
+    .aside-label { font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gray); font-weight: 300; margin-bottom: 12px; }
+    .aside-text { font-size: 16px; line-height: 1.85; color: rgba(240,237,232,0.78); font-weight: 300; }
+    .meta-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .meta-cell { border-left: 1px solid var(--gray-dark); padding-left: 16px; }
+    .meta-cell-label { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gray); font-weight: 300; margin-bottom: 6px; }
+    .meta-cell-value { font-size: 13px; font-weight: 500; letter-spacing: 0.04em; color: var(--white); }
+
+    /* VIDEO TRIO */
+    .video-trio {
+      max-width: 1200px; margin: 0 auto; padding: 0 48px 48px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
+    }
+    .video-cell { position: relative; aspect-ratio: 9/16; overflow: hidden; background: #111; cursor: pointer; }
+    .video-cell video { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .video-cell.active-video { outline: 1px solid rgba(255,255,255,0.25); }
+    .video-controls { position: absolute; bottom: 16px; left: 16px; display: flex; gap: 10px; z-index: 10; }
+    .video-btn { width: 40px; height: 40px; border: 1px solid rgba(240,237,232,0.4); background: rgba(8,8,8,0.6); backdrop-filter: blur(6px); color: var(--white); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s; flex-shrink: 0; }
+    .video-btn:hover { background: rgba(8,8,8,0.9); border-color: rgba(240,237,232,0.9); }
+    .video-btn svg { width: 16px; height: 16px; fill: var(--white); }
+
+    /* GALLERY */
+    .gallery { max-width: 1200px; margin: 0 auto; padding: 0 48px 120px; display: flex; flex-direction: column; gap: 16px; }
+    .g-row { display: grid; gap: 16px; align-items: start; }
+    .g-row img { width: 100%; height: auto; display: block; }
+    .g-duo         { grid-template-columns: 1fr 1fr; }
+    .g-split-right { grid-template-columns: 2fr 1fr; }
+    .g-split-left  { grid-template-columns: 1fr 2fr; }
+
+    /* PROJECT NAV */
+    .project-nav { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid rgba(255,255,255,0.08); }
+    .project-nav-item { padding: 40px 48px; text-decoration: none; display: flex; flex-direction: column; gap: 8px; transition: background 0.25s; color: var(--white); }
+    .project-nav-item:last-child { border-left: 1px solid rgba(255,255,255,0.08); text-align: right; align-items: flex-end; }
+    .project-nav-item:hover { background: #0f0f0f; }
+    .nav-dir { font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); font-weight: 300; }
+    .nav-title { font-size: 20px; font-weight: 700; color: var(--white); letter-spacing: 0.04em; text-transform: uppercase; }
+
+    /* FOOTER */
+    footer { padding: 60px 48px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; border-top: 1px solid var(--gray-dark); position: relative; z-index: 1; }
+    .footer-left   { font-size: 11px; letter-spacing: 0.12em; color: var(--gray); font-weight: 300; }
+    .footer-center { display: flex; align-items: center; gap: 20px; justify-content: center; }
+    .footer-center img { height: 20px; width: auto; display: block; }
+    .footer-instagram { display: flex; align-items: center; color: var(--gray); opacity: 0.6; transition: opacity 0.25s; }
+    .footer-instagram:hover { opacity: 1; }
+    .footer-right  { display: flex; gap: 24px; justify-content: flex-end; align-items: center; }
+    .footer-right a { color: var(--gray); text-decoration: none; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; font-weight: 300; transition: color 0.25s; }
+    .footer-right a:hover { color: var(--white); }
+
+    .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 960px) {
+      .projekt-intro { grid-template-columns: 1fr; padding: 40px 24px; gap: 40px; }
+      .video-trio { grid-template-columns: 1fr; padding: 0 24px 32px; }
+      .gallery { padding: 0 24px 80px; }
+      .g-duo, .g-split-right, .g-split-left { grid-template-columns: 1fr; }
+      .project-nav-item { padding: 32px 24px; }
+      footer { grid-template-columns: 1fr; gap: 20px; text-align: center; padding: 40px 24px; }
+      .footer-right { justify-content: center; }
+    }
+
+    #page-transition { position: fixed; inset: 0; background: var(--black); z-index: 9999; opacity: 0; pointer-events: none; transition: opacity 0.28s ease; }
+    #page-transition.fade-out { opacity: 1; pointer-events: all; }
+    body { opacity: 0; animation: pageIn 0.4s ease 0.05s forwards; }
+    @keyframes pageIn { to { opacity: 1; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <div class="nav-dropdown">
+        <a href="../../portfolio.html">PORTFOLIO</a>
+        <div class="dropdown-menu">
+          <a href="../../portfolio.html#automotive">Automotive</a>
+          <a href="../../portfolio.html#lifestyle">Lifestyle &amp; Kampagne</a>
+          <a href="../../portfolio.html#event">Event &amp; Sport</a>
+          <a href="../../portfolio.html#corporate">Corporate</a>
+        </div>
+      </div>
+      <a href="../../about.html">ÜBER MICH</a>
+    </div>
+    <div class="nav-logo">
+      <a href="../../index.html"><img src="../../images/logo.png" alt="Buzz Adam"></a>
+    </div>
+    <div class="nav-right">
+      <a href="../../contact.html">KONTAKT</a>
+      <a href="../../blog.html">BLOG</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <img src="images/03.jpg" alt="Mercedes AMG GT Côte d'Azur — Aerial">
+    <div class="hero-breadcrumb">
+      <a href="../../portfolio.html">Portfolio</a>
+      <span>/</span>
+      Automotive
+    </div>
+    <div class="hero-bottom">
+      <h1 class="hero-title">Mercedes<br>AMG GT<br><em>Côte d'Azur</em></h1>
+      <div class="hero-tags">
+        <div class="hero-tag"><strong>Kunde</strong>Mercedes-AMG</div>
+        <div class="hero-tag"><strong>Leistungen</strong>Foto · Video</div>
+        <div class="hero-tag"><strong>Jahr</strong>2024</div>
+        <div class="hero-tag"><strong>Location</strong>Côte d'Azur, Frankreich</div>
+        <div class="hero-tag"><strong>Fahrzeug</strong>AMG GT 55</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="projekt-intro fade-in">
+    <div>
+      <p class="aside-label">Projektinfo</p>
+      <p class="aside-text">
+        Ein Roadtrip entlang der Côte d'Azur mit dem neuen Mercedes-AMG GT 55 in Patagonia Red Metallic.
+        Von den Hafenmolen Saint-Raphaëls über die Küstenstraßen nach Monaco — cineastische Foto- und
+        Videoarbeit, die das Fahrerlebnis zwischen Mittelmeerkulisse und alpinen Serpentinen festhält.
+      </p>
+    </div>
+    <div class="meta-row">
+      <div class="meta-cell">
+        <div class="meta-cell-label">Art</div>
+        <div class="meta-cell-value">Roadtrip Dokumentation</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Format</div>
+        <div class="meta-cell-value">Foto · Video · Reels</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Location</div>
+        <div class="meta-cell-value">Saint-Raphaël · Monaco</div>
+      </div>
+      <div class="meta-cell">
+        <div class="meta-cell-label">Fahrzeug</div>
+        <div class="meta-cell-value">AMG GT 55 Patagonia Red</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO TRIO -->
+  <div class="video-trio fade-in" id="videoTrio">
+
+    <div class="video-cell active-video" id="cell-0">
+      <video id="vid-0" src="videos/reel-hafen.mp4" muted playsinline preload="metadata"></video>
+      <div class="video-controls">
+        <button class="video-btn" id="btn-play-0" aria-label="Play/Pause">
+          <svg id="icon-pause-0" viewBox="0 0 24 24"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+          <svg id="icon-play-0"  viewBox="0 0 24 24" style="display:none;"><polygon points="5,3 19,12 5,21"/></svg>
+        </button>
+        <button class="video-btn" id="btn-sound-0" aria-label="Ton ein/aus">
+          <svg id="icon-muted-0" viewBox="0 0 24 24"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><line x1="23" y1="9" x2="17" y2="15" stroke="white" stroke-width="2" fill="none"/><line x1="17" y1="9" x2="23" y2="15" stroke="white" stroke-width="2" fill="none"/></svg>
+          <svg id="icon-sound-0" viewBox="0 0 24 24" style="display:none;"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><path d="M15.54,8.46a5,5,0,0,1,0,7.07" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M19.07,4.93a10,10,0,0,1,0,14.14" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="video-cell" id="cell-1">
+      <video id="vid-1" src="videos/reel-coast.mp4" muted playsinline preload="metadata"></video>
+      <div class="video-controls">
+        <button class="video-btn" id="btn-play-1" aria-label="Play/Pause">
+          <svg id="icon-pause-1" viewBox="0 0 24 24" style="display:none;"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+          <svg id="icon-play-1"  viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+        </button>
+        <button class="video-btn" id="btn-sound-1" aria-label="Ton ein/aus">
+          <svg id="icon-muted-1" viewBox="0 0 24 24"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><line x1="23" y1="9" x2="17" y2="15" stroke="white" stroke-width="2" fill="none"/><line x1="17" y1="9" x2="23" y2="15" stroke="white" stroke-width="2" fill="none"/></svg>
+          <svg id="icon-sound-1" viewBox="0 0 24 24" style="display:none;"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><path d="M15.54,8.46a5,5,0,0,1,0,7.07" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M19.07,4.93a10,10,0,0,1,0,14.14" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="video-cell" id="cell-2">
+      <video id="vid-2" src="videos/reel-mountain.mp4" muted playsinline preload="metadata"></video>
+      <div class="video-controls">
+        <button class="video-btn" id="btn-play-2" aria-label="Play/Pause">
+          <svg id="icon-pause-2" viewBox="0 0 24 24" style="display:none;"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+          <svg id="icon-play-2"  viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+        </button>
+        <button class="video-btn" id="btn-sound-2" aria-label="Ton ein/aus">
+          <svg id="icon-muted-2" viewBox="0 0 24 24"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><line x1="23" y1="9" x2="17" y2="15" stroke="white" stroke-width="2" fill="none"/><line x1="17" y1="9" x2="23" y2="15" stroke="white" stroke-width="2" fill="none"/></svg>
+          <svg id="icon-sound-2" viewBox="0 0 24 24" style="display:none;"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><path d="M15.54,8.46a5,5,0,0,1,0,7.07" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M19.07,4.93a10,10,0,0,1,0,14.14" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery">
+
+    <div class="g-row g-split-left fade-in">
+      <img src="images/06.jpg" alt="AMG GT – Affalterbach Badge">
+      <img src="images/07.jpg" alt="AMG GT mit offener Tür am Mittelmeer">
+    </div>
+
+    <div class="g-row g-split-right fade-in">
+      <img src="images/01.jpg" alt="AMG GT vor dem Leuchtturm frontal">
+      <img src="images/02.jpg" alt="AMG GT seitlich am Leuchtturm">
+    </div>
+
+    <div class="g-row g-duo fade-in">
+      <img src="images/04.jpg" alt="Innenraum AMG GT – Beifahrerseite">
+      <img src="images/05.jpg" alt="Innenraum AMG GT – Fahrerseite">
+    </div>
+
+  </div>
+
+  <!-- PROJECT NAVIGATION -->
+  <div class="project-nav">
+    <a href="../proline-wheels/index.html" class="project-nav-item">
+      <span class="nav-dir">← Vorheriges Projekt</span>
+      <span class="nav-title">Proline Wheels</span>
+    </a>
+    <a href="../../portfolio.html" class="project-nav-item">
+      <span class="nav-dir">Alle Projekte →</span>
+      <span class="nav-title">Portfolio</span>
+    </a>
+  </div>
+
+  <footer>
+    <div class="footer-left">© 2026 Buzz Adam — Blazej Adamowski</div>
+    <div class="footer-center">
+      <img src="../../images/logo.png" alt="Buzz Adam">
+      <a href="https://www.instagram.com/buzzadam_" target="_blank" rel="noopener" aria-label="Instagram" class="footer-instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none"/>
+        </svg>
+      </a><a href="https://www.linkedin.com/in/blazejadamowski" target="_blank" rel="noopener" aria-label="LinkedIn" class="footer-instagram"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="3" ry="3"/><line x1="8" y1="11" x2="8" y2="16"/><line x1="8" y1="8" x2="8" y2="8.01"/><line x1="12" y1="16" x2="12" y2="11"/><path d="M16 16v-3a2 2 0 0 0-4 0"/></svg></a>
+    </div>
+    <div class="footer-right">
+      <a href="../../impressum.html">IMPRESSUM</a>
+      <a href="../../datenschutz.html">DATENSCHUTZ</a>
+    </div>
+  </footer>
+
+  <div id="page-transition"></div>
+
+  <script>
+    // Sequential video autoplay
+    const vids  = [0,1,2].map(i => document.getElementById('vid-' + i));
+    const cells = [0,1,2].map(i => document.getElementById('cell-' + i));
+
+    function setPlayIcon(i, isPlaying) {
+      document.getElementById('icon-pause-' + i).style.display = isPlaying ? '' : 'none';
+      document.getElementById('icon-play-'  + i).style.display = isPlaying ? 'none' : '';
+    }
+    function setSoundIcon(i, isMuted) {
+      document.getElementById('icon-muted-' + i).style.display = isMuted ? '' : 'none';
+      document.getElementById('icon-sound-' + i).style.display = isMuted ? 'none' : '';
+    }
+    function playVideo(index) {
+      vids.forEach((v, i) => {
+        if (i !== index) { v.pause(); v.currentTime = 0; setPlayIcon(i, false); cells[i].classList.remove('active-video'); }
+      });
+      cells[index].classList.add('active-video');
+      vids[index].play().catch(() => {});
+      setPlayIcon(index, true);
+    }
+    vids.forEach((v, i) => { v.addEventListener('ended', () => playVideo((i + 1) % 3)); });
+    [0,1,2].forEach(i => {
+      document.getElementById('btn-play-' + i).addEventListener('click', e => {
+        e.stopPropagation();
+        if (vids[i].paused) { playVideo(i); } else { vids[i].pause(); setPlayIcon(i, false); }
+      });
+      document.getElementById('btn-sound-' + i).addEventListener('click', e => {
+        e.stopPropagation();
+        vids[i].muted = !vids[i].muted;
+        setSoundIcon(i, vids[i].muted);
+      });
+      cells[i].addEventListener('click', () => { if (vids[i].paused) playVideo(i); });
+    });
+    const trioObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { playVideo(0); trioObserver.disconnect(); } });
+    }, { threshold: 0.1 });
+    trioObserver.observe(document.getElementById('videoTrio'));
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Page transitions
+    document.querySelectorAll('a[href]').forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('mailto') || href.startsWith('tel') || link.target === '_blank') return;
+      if (href.startsWith('#')) return;
+      const targetPath = href.split('#')[0];
+      const anchor = href.includes('#') ? href.split('#')[1] : null;
+      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+      if (anchor && (targetPath === currentPath || targetPath === '')) {
+        link.addEventListener('click', e => { e.preventDefault(); const el = document.getElementById(anchor); if (el) el.scrollIntoView({ behavior: 'smooth' }); });
+        return;
+      }
+      if (href.startsWith('http')) return;
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const overlay = document.getElementById('page-transition');
+        overlay.classList.add('fade-out');
+        setTimeout(() => { window.location.href = href; }, 260);
+      });
+    });
+
+    // Reset overlay on back/forward cache restore
+    window.addEventListener('pageshow', e => {
+      if (e.persisted) {
+        const overlay = document.getElementById('page-transition');
+        if (overlay) { overlay.classList.remove('fade-out'); }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+node_modules/
+.claude/
+temporary screenshots/
+package-lock.json

@@ -174,16 +174,19 @@
     }
 
     @media (max-width: 768px) {
-      html { scroll-snap-type: y proximity; }
+      html { scroll-snap-type: y mandatory; }
       .gallery,
       .image-grid { padding: 0; gap: 0; }
       .g-row { gap: 0; }
       .g-row img {
         width: 100%;
         height: auto;
+        max-height: 92vh;
+        object-fit: contain;
         display: block;
-        scroll-snap-align: start;
+        scroll-snap-align: center;
       }
+      .g-row:last-of-type img:last-child { scroll-snap-align: none; }
       .project-nav { grid-template-columns: 1fr; }
       .project-nav-item:last-child { border-left: none; border-top: 1px solid rgba(255,255,255,0.08); text-align: left; align-items: flex-start; }
       .project-nav-item { padding: 28px 24px; }

@@ -418,16 +418,19 @@
     }
 
     @media (max-width: 768px) {
-      html { scroll-snap-type: y proximity; }
+      html { scroll-snap-type: y mandatory; }
       .gallery,
       .image-grid { padding: 0; gap: 0; }
       .g-row { gap: 0; }
       .g-row img {
         width: 100%;
         height: auto;
+        max-height: 92vh;
+        object-fit: contain;
         display: block;
-        scroll-snap-align: start;
+        scroll-snap-align: center;
       }
+      .g-row:last-of-type img:last-child { scroll-snap-align: none; }
       .hero-breadcrumb { left: 24px; top: 80px; }
       .hero-bottom { left: 24px; right: 24px; bottom: 32px; flex-direction: column; align-items: flex-start; gap: 16px; }
       .hero-title { font-size: clamp(28px, 8vw, 40px); }

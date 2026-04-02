@@ -249,6 +249,7 @@
       opacity: 0;
       animation: fadeUp 1s ease 1.2s forwards;
     }
+    .hero-scroll-mobile { display: none; }
 
     .hero-scroll span {
       font-size: 10px;
@@ -472,6 +473,65 @@
       margin-top: 6px;
     }
 
+    /* ─── CLIENTS MARQUEE ─── */
+    .clients-section {
+      border-top: 1px solid var(--gray-dark);
+      border-bottom: 1px solid var(--gray-dark);
+      padding: 56px 0;
+      overflow: hidden;
+      background: var(--black);
+    }
+    .clients-label {
+      padding: 0 48px 32px;
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+    }
+    .marquee-outer {
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+    }
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      gap: 72px;
+      width: max-content;
+      will-change: transform;
+      cursor: grab;
+    }
+    .marquee-track.dragging { cursor: grabbing; }
+    .marquee-track img {
+      max-height: 52px;
+      width: auto;
+      height: auto;
+      max-width: 260px;
+      flex-shrink: 0;
+      opacity: 0.55;
+      transition: opacity 0.3s ease;
+    }
+    .marquee-track img:hover { opacity: 1; }
+    /* Individual optical size corrections */
+    .marquee-track img[alt="Volkswagen Automobile Rhein-Neckar"] { height: 32px; max-height: unset; max-width: unset; }
+    .marquee-track img[alt="ATOS Klinik Heidelberg"]             { height: 28px; max-height: unset; max-width: unset; }
+    .marquee-track img[alt="Askyurself"]                         { max-height: 22px; height: unset; max-width: unset; }
+    .marquee-track img[alt="Dentsply Sirona"]                    { max-height: 38px; }
+    .marquee-track img[alt="Netlution"]                          { max-height: 36px; }
+    .marquee-track img[alt="Proline Wheels"]                     { max-height: 24px; max-width: 180px; }
+    .marquee-track img[alt="TK Sports"]                          { max-height: 30px; }
+    .marquee-track img[alt="Purelei"]                            { max-height: 54px; }
+    .marquee-track img[alt="Engelhorn"]                          { max-height: 66px; }
+    @media (max-width: 768px) {
+      .clients-label { padding: 0 24px 28px; }
+      .marquee-track { gap: 48px; }
+      .marquee-track img { max-height: 28px; max-width: 160px; }
+      .marquee-track img[alt="MHC"]             { max-height: 46px; }
+      .marquee-track img[alt="Lamborghini"]      { max-height: 52px; }
+      .marquee-track img[alt="AYAKA"]            { max-height: 46px; }
+      .marquee-track img[alt="Mercedes-AMG"]     { max-height: 46px; }
+      .marquee-track img[alt="Three Sixty Vodka"] { max-height: 46px; }
+    }
+
     /* ─── FOOTER ─── */
         footer {
       padding: 60px 48px;
@@ -518,14 +578,14 @@
     .nav-hamburger {
       display: none;
       flex-direction: column;
-      gap: 5px;
+      gap: 6px;
       background: none;
       border: none;
       cursor: pointer;
       padding: 4px;
-      z-index: 200;
+      z-index: 9998;
       position: fixed;
-      top: 24px;
+      top: 22px;
       right: 24px;
     }
     .nav-hamburger span {
@@ -533,30 +593,41 @@
       width: 24px;
       height: 1.5px;
       background: var(--white);
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      transition: transform 0.4s ease, opacity 0.25s ease, width 0.3s ease;
+      transform-origin: center;
     }
-    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
-    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
     .mobile-menu {
-      display: none;
+      display: flex;
       position: fixed;
       inset: 0;
       background: var(--black);
-      z-index: 150;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      z-index: 9997;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 40px;
+      gap: 36px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
     }
-    .mobile-menu.open { display: flex; }
+    .mobile-menu.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
     .mobile-menu a {
       color: var(--white);
       text-decoration: none;
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
+      font-size: 40px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
       opacity: 0.85;
       transition: opacity 0.2s;
@@ -571,10 +642,16 @@
       nav {
         padding: 20px 24px;
         grid-template-columns: 1fr auto;
+        z-index: 9999;
       }
       .nav-logo { justify-content: flex-start; }
 
-      .hero { padding: 0 24px; }
+      .hero { padding: 68px 24px 0; height: min(125vw, 92vh); min-height: unset; display: flex; flex-direction: column; justify-content: center; }
+      .hero-sub { white-space: nowrap; font-size: 11px; }
+      .hero-scroll-desktop { display: none !important; }
+      .hero-scroll-mobile { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 20px 0 0; }
+      .hero-scroll-mobile .scroll-line { width: 1px; height: 24px; background: linear-gradient(to bottom, var(--gray), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+      .hero-scroll-mobile span { font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gray); font-weight: 300; }
       .hero-title { font-size: clamp(32px, 9vw, 40px); }
 
       .section-header { padding: 60px 24px 32px; }
@@ -600,6 +677,9 @@
       }
 
       .portfolio-cta { padding: 16px 24px 40px; }
+      .portfolio-cta a { white-space: nowrap; padding: 16px 24px; font-size: 10px; }
+      .project-item.in-view .project-overlay { opacity: 1; transition: opacity 0.6s ease; }
+      .project-item.in-view .project-info { transform: translateY(0); transition: transform 0.6s ease; }
 
       .about-strip {
         grid-template-columns: 1fr;
@@ -698,11 +778,17 @@
       <span>STORYTELLING.</span>
     </h1>
     <p class="hero-sub">Automotive &nbsp;·&nbsp; Lifestyle &nbsp;·&nbsp; Corporate</p>
-    <div class="hero-scroll">
+    <div class="hero-scroll hero-scroll-desktop">
       <div class="scroll-line"></div>
       <span>Scroll</span>
     </div>
   </section>
+
+  <!-- Scroll indicator mobile only -->
+  <div class="hero-scroll-mobile">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
 
   <!-- Portfolio Section -->
   <div class="section-header fade-in">
@@ -799,6 +885,47 @@
     </div>
   </section>
 
+  <!-- Clients Marquee -->
+  <section class="clients-section">
+    <div class="clients-label">
+      <span class="section-label">Kunden &amp; Marken</span>
+      <div class="section-line"></div>
+    </div>
+    <div class="marquee-outer">
+      <div class="marquee-track">
+        <img src="logos/processed/mercedes.png" alt="Mercedes-AMG">
+        <img src="logos/processed/EH-Logo.png" alt="Engelhorn">
+        <img src="logos/processed/Dentsply_sirona_logo.png" alt="Dentsply Sirona">
+        <img src="logos/processed/AYAKA_-_Logo_1_-_schwarz.png" alt="AYAKA">
+        <img src="logos/processed/netlution-gmb-h-logo.png" alt="Netlution">
+        <img src="logos/processed/Social_Logo.png" alt="Purelei">
+        <img src="logos/processed/241021_ThreeSixtyVodka_Logo_sw.png" alt="Three Sixty Vodka">
+        <img src="logos/processed/Image-Word-black-wB-1000x462.png" alt="TK Sports">
+        <img src="logos/processed/20502472-lamborghini-marke-logo-auto-symbol-weiss-design-italienisch-automobil-illustration-mit-schwarz-hintergrund-kostenlos-vektor.png" alt="Lamborghini">
+        <img src="logos/processed/Proline-inv.png" alt="Proline Wheels">
+        <img src="logos/processed/Logo_MHC.png" alt="MHC">
+        <img src="logos/processed/csm_Logo_Heidelberg_9220209933.png" alt="ATOS Klinik Heidelberg">
+        <img src="logos/processed/Unbenannt-1.png" alt="Volkswagen Automobile Rhein-Neckar">
+        <img src="logos/processed/askyurself.png" alt="Askyurself">
+        <!-- Duplicate set for seamless loop -->
+        <img src="logos/processed/mercedes.png" alt="Mercedes-AMG">
+        <img src="logos/processed/EH-Logo.png" alt="Engelhorn">
+        <img src="logos/processed/Dentsply_sirona_logo.png" alt="Dentsply Sirona">
+        <img src="logos/processed/AYAKA_-_Logo_1_-_schwarz.png" alt="AYAKA">
+        <img src="logos/processed/netlution-gmb-h-logo.png" alt="Netlution">
+        <img src="logos/processed/Social_Logo.png" alt="Purelei">
+        <img src="logos/processed/241021_ThreeSixtyVodka_Logo_sw.png" alt="Three Sixty Vodka">
+        <img src="logos/processed/Image-Word-black-wB-1000x462.png" alt="TK Sports">
+        <img src="logos/processed/20502472-lamborghini-marke-logo-auto-symbol-weiss-design-italienisch-automobil-illustration-mit-schwarz-hintergrund-kostenlos-vektor.png" alt="Lamborghini">
+        <img src="logos/processed/Proline-inv.png" alt="Proline Wheels">
+        <img src="logos/processed/Logo_MHC.png" alt="MHC">
+        <img src="logos/processed/csm_Logo_Heidelberg_9220209933.png" alt="ATOS Klinik Heidelberg">
+        <img src="logos/processed/Unbenannt-1.png" alt="Volkswagen Automobile Rhein-Neckar">
+        <img src="logos/processed/askyurself.png" alt="Askyurself">
+      </div>
+    </div>
+  </section>
+
   <!-- Footer -->
     <footer>
     <div class="footer-left">© 2026 Buzz Adam — Blazej Adamowski</div>
@@ -862,6 +989,20 @@
       });
     });
 
+    // Mobile: show project overlay when scrolled into view
+    if (window.matchMedia('(max-width: 768px)').matches) {
+      const projectObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          } else {
+            entry.target.classList.remove('in-view');
+          }
+        });
+      }, { threshold: 0.4 });
+      document.querySelectorAll('.project-item').forEach(el => projectObserver.observe(el));
+    }
+
     function toggleMobileMenu() {
       const menu = document.getElementById('mobileMenu');
       const btn = document.querySelector('.nav-hamburger');
@@ -884,6 +1025,74 @@
         if (overlay) { overlay.classList.remove('fade-out'); }
       }
     });
+  </script>
+
+  <script>
+    // Marquee: seamless right-moving loop + drag
+    (function() {
+      const track = document.querySelector('.marquee-track');
+      if (!track) return;
+
+      const SPEED = 0.38; // px per frame, right-moving
+      let setWidth = 0;
+      let pos = 0;       // ranges from -setWidth to 0
+      let dragging = false;
+      let dragStartX = 0;
+      let dragStartPos = 0;
+
+      function wrap(p) {
+        // keep pos in range [-setWidth, 0)
+        while (p > 0) p -= setWidth;
+        while (p <= -setWidth) p += setWidth;
+        return p;
+      }
+
+      function tick() {
+        if (!dragging) {
+          pos += SPEED;
+          pos = wrap(pos);
+        }
+        track.style.transform = `translate3d(${pos}px,0,0)`;
+        requestAnimationFrame(tick);
+      }
+
+      function init() {
+        setWidth = track.scrollWidth / 2;
+        pos = -setWidth; // start showing second set (= first set, seamless)
+        requestAnimationFrame(tick);
+      }
+
+      // Mouse
+      track.addEventListener('mousedown', e => {
+        dragging = true;
+        dragStartX = e.clientX;
+        dragStartPos = pos;
+        track.classList.add('dragging');
+        e.preventDefault();
+      });
+      window.addEventListener('mousemove', e => {
+        if (!dragging) return;
+        pos = wrap(dragStartPos + (e.clientX - dragStartX));
+      });
+      window.addEventListener('mouseup', () => {
+        dragging = false;
+        track.classList.remove('dragging');
+      });
+
+      // Touch
+      track.addEventListener('touchstart', e => {
+        dragging = true;
+        dragStartX = e.touches[0].clientX;
+        dragStartPos = pos;
+      }, { passive: true });
+      track.addEventListener('touchmove', e => {
+        if (!dragging) return;
+        pos = wrap(dragStartPos + (e.touches[0].clientX - dragStartX));
+      }, { passive: true });
+      track.addEventListener('touchend', () => { dragging = false; });
+
+      window.addEventListener('load', init);
+    })();
   </script>
 </body>
 </html>

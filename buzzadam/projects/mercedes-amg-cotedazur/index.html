@@ -248,11 +248,11 @@
     @keyframes pageIn { to { opacity: 1; } }
 
     @media (max-width: 768px) {
-      html { scroll-snap-type: y proximity; }
+      html { scroll-snap-type: y mandatory; }
       .gallery,
       .image-grid { padding: 0; gap: 0; }
       .g-row { gap: 0; }
-      .g-row img {
+      .g-row img, .g-row video {
         width: 100%;
         height: auto;
         max-height: 92vh;

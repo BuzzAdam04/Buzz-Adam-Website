@@ -126,8 +126,8 @@
       background: rgba(255,255,255,0.04);
     }
 
-    .nav-left  { display: flex; gap: 36px; align-items: center; overflow: visible; }
-    .nav-right { display: flex; gap: 36px; align-items: center; justify-content: flex-end; overflow: visible; }
+    .nav-left  { display: flex; gap: 36px; align-items: center; overflow: visible; justify-content: flex-end; padding-right: 48px; }
+    .nav-right { display: flex; gap: 36px; align-items: center; justify-content: flex-start; overflow: visible; padding-left: 48px; }
     .nav-logo  { display: flex; justify-content: center; align-items: center; }
     .nav-logo img { height: 28px; width: auto; display: block; }
     nav a {
@@ -1033,7 +1033,7 @@
       const track = document.querySelector('.marquee-track');
       if (!track) return;
 
-      const SPEED = 0.38; // px per frame, right-moving
+      const SPEED = -0.38; // px per frame, left-moving
       let setWidth = 0;
       let pos = 0;       // ranges from -setWidth to 0
       let dragging = false;
